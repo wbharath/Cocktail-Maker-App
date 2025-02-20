@@ -1,7 +1,16 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import {About, Landing, Error, HomeLayout, NewsLetter, Cocktail, SinglePageError} from './pages'
-import {loader as landingLoader} from './pages/Landing'
+import {
+  About,
+  Landing,
+  Error,
+  HomeLayout,
+  NewsLetter,
+  Cocktail,
+  SinglePageError
+} from './pages'
+import { loader as landingLoader } from './pages/Landing'
 import { loader as singleCocktailLoader } from './pages/Cocktail'
+import { action as newsletterAction } from './pages/NewsLetter'
 function App() {
   const router = createBrowserRouter([
     // Basic
@@ -22,30 +31,30 @@ function App() {
     {
       path: '/',
       element: <HomeLayout />,
-      errorElement: <Error/>,
+      errorElement: <Error />,
       children: [
         {
           // path: 'landing', here index-true.. Home Layout is shared(it's not a page)
           index: true,
-          element: <Landing/>,
-          errorElement: <SinglePageError/>,
-          loader: landingLoader,
+          element: <Landing />,
+          errorElement: <SinglePageError />,
+          loader: landingLoader
         },
         {
           path: 'cocktail/:id',
-          errorElement: <SinglePageError/>,
+          errorElement: <SinglePageError />,
           loader: singleCocktailLoader,
-          element: <Cocktail/>
+          element: <Cocktail />
         },
         {
           path: 'newsletter',
-          element: <NewsLetter/>
+          element: <NewsLetter />,
+          action: newsletterAction,
         },
         {
           path: 'about',
           element: <About />
-        },
-      
+        }
       ]
     }
   ])
