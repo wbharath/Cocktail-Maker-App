@@ -1,4 +1,4 @@
-import { Form, redirect } from 'react-router-dom'
+import { Form, redirect, useNavigation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 export const action = async ({ request }) => {
@@ -10,11 +10,13 @@ export const action = async ({ request }) => {
   const data = Object.fromEntries(formData)
   console.log(data)
   //here we can set up a post api call and then get the details.
-  toast.success("Form Submitted")
+  toast.success('Form Submitted')
   return redirect('/')
 }
 
 const NewsLetter = () => {
+  const navigation = useNavigation()
+  const isSubmitting = navigation.state === 'submitting'
   return (
     <Form className="form" method="post">
       <h4 style={{ textAlign: 'center', marginBottom: '2rem' }}>
@@ -60,8 +62,9 @@ const NewsLetter = () => {
         type="submit"
         className="btn btn-block"
         style={{ marginTop: '0.5rem' }}
+        disabled={isSubmitting}
       >
-        Submit
+        {isSubmitting ? 'submit' : 'submit'}
       </button>
     </Form>
   )
