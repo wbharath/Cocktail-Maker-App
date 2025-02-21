@@ -4,13 +4,13 @@ import {
   Landing,
   Error,
   HomeLayout,
-  NewsLetter,
+  Newsletter,
   Cocktail,
   SinglePageError
 } from './pages'
 import { loader as landingLoader } from './pages/Landing'
 import { loader as singleCocktailLoader } from './pages/Cocktail'
-import { action as newsletterAction } from './pages/NewsLetter'
+import { action as newsletterAction } from './pages/Newsletter'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
@@ -59,7 +59,7 @@ function App() {
         },
         {
           path: 'newsletter',
-          element: <NewsLetter />,
+          element: <Newsletter />,
           action: newsletterAction
         },
         {

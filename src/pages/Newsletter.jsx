@@ -14,7 +14,7 @@ export const action = async ({ request }) => {
   return redirect('/')
 }
 
-const NewsLetter = () => {
+const Newsletter = () => {
   const navigation = useNavigation()
   const isSubmitting = navigation.state === 'submitting'
   return (
@@ -70,4 +70,4 @@ const NewsLetter = () => {
   )
 }
 
-export default NewsLetter
+export default Newsletter
