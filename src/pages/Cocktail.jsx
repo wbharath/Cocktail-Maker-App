@@ -1,25 +1,42 @@
 import axios from 'axios'
 import { Link, useLoaderData, Navigate } from 'react-router-dom'
 import Wrapper from '../assets/wrappers/CocktailPage'
+import { useQuery } from '@tanstack/react-query'
 
 const singleCocktailUrl =
   'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i='
 
-export const loader = async ({params}) => {
-  // console.log(data)
-  const { id } = params
-  const {data} = await axios.get(`${singleCocktailUrl}${id}`)
-  // console.log(response)
-
-  return { id, data}
+const singleCocktailQuery = (id) => {
+  return {
+    queryKey: ['cocktail', id],
+    queryFn: async () => {
+      const { data } = await axios.get(`${singleCocktailUrl}${id}`)
+      return data
+    }
+  }
 }
+export const loader =
+  (queryClient) =>
+  async ({ params }) => {
+    // console.log(data)
+    const { id } = params
+    //checks if it's in cache or re-fetches 
+    await queryClient.ensureQueryData(singleCocktailQuery(id))
+    // const { data } = await axios.get(`${singleCocktailUrl}${id}`)
+    // console.log(response)
+
+    // return { id, data }
+    return { id }
+  }
 const Cocktail = () => {
-  const { id, data } = useLoaderData()
+  // const { id, data } = useLoaderData()
+  const { id } = useLoaderData()
   // if(!data) return <h2>Something went wrong</h2>
-  if(!data) return <Navigate to='/'/>
+  const { data } = useQuery(singleCocktailQuery(id))
+  if (!data) return <Navigate to="/" />
   const singleDrink = data.drinks[0]
 
-  // const ingredients = singleDrink 
+  // const ingredients = singleDrink
   // console.log(singleDrink)
   const {
     strDrink: name,
@@ -31,15 +48,12 @@ const Cocktail = () => {
   } = singleDrink
   // console.log(singleDrink)
   const validIngredients = Object.keys(singleDrink)
-  .filter((key)=>key.startsWith('strIngredient') && singleDrink[key]!==null)
-  .map((key)=>singleDrink[key])
+    .filter(
+      (key) => key.startsWith('strIngredient') && singleDrink[key] !== null
+    )
+    .map((key) => singleDrink[key])
 
   // console.log(validIngredients)
-
-
-
-
-  
 
   return (
     <Wrapper>
@@ -70,8 +84,13 @@ const Cocktail = () => {
           </p>
           <p>
             <span className="drink-data">ingredients: </span>
-            {validIngredients.map((item, index)=>{
-              return <span className='ing' key={item}>{item}{index<validIngredients.length -1? ',':''}</span>
+            {validIngredients.map((item, index) => {
+              return (
+                <span className="ing" key={item}>
+                  {item}
+                  {index < validIngredients.length - 1 ? ',' : ''}
+                </span>
+              )
             })}
           </p>
           <p>
